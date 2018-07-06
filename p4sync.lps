@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="10"/>
+    <BuildModes Active="Default"/>
+    <Units Count="11">
+      <Unit0>
+        <Filename Value="p4sync.ppr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="81" Y="17"/>
+        <UsageCount Value="20"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="_fmmain.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="fmMain"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="_fmMain"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="190"/>
+        <CursorPos X="21" Y="193"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\objpas\sysutils\osutilsh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="8"/>
+        <CursorPos X="42" Y="26"/>
+        <UsageCount Value="10"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\win\wininc\defines.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2672"/>
+        <CursorPos X="6" Y="2690"/>
+        <UsageCount Value="10"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\objpas\classes\classesh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="705"/>
+        <CursorPos X="74" Y="721"/>
+        <UsageCount Value="10"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\win\wininc\redef.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="314"/>
+        <CursorPos X="10" Y="332"/>
+        <UsageCount Value="10"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\win\wininc\ascdef.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="58"/>
+        <CursorPos X="10" Y="76"/>
+        <UsageCount Value="10"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\objpas\sysutils\sysstrh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="288"/>
+        <CursorPos X="11" Y="324"/>
+        <UsageCount Value="10"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\win\wininc\func.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="160"/>
+        <CursorPos X="55" Y="178"/>
+        <UsageCount Value="10"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\win\wininc\struct.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="6875"/>
+        <CursorPos X="11" Y="6893"/>
+        <UsageCount Value="10"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="C:\codetyphon\typhon\lcl\dialogs.pp"/>
+        <UnitName Value="Dialogs"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="845"/>
+        <CursorPos X="64" Y="879"/>
+        <UsageCount Value="10"/>
+      </Unit10>
+    </Units>
+    <JumpHistory Count="26" HistoryIndex="25">
+      <Position1>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="78" Column="16" TopLine="68"/>
+      </Position1>
+      <Position2>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="73" Column="13" TopLine="65"/>
+      </Position2>
+      <Position3>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="71" Column="24" TopLine="53"/>
+      </Position3>
+      <Position4>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="281" Column="33" TopLine="250"/>
+      </Position4>
+      <Position5>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="58" Column="100" TopLine="35"/>
+      </Position5>
+      <Position6>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="177" Column="36" TopLine="160"/>
+      </Position6>
+      <Position7>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="35" Column="44" TopLine="13"/>
+      </Position7>
+      <Position8>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="204" TopLine="188"/>
+      </Position8>
+      <Position9>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="153" Column="4" TopLine="135"/>
+      </Position9>
+      <Position10>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="35" Column="15" TopLine="17"/>
+      </Position10>
+      <Position11>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="188" TopLine="165"/>
+      </Position11>
+      <Position12>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="36" Column="15" TopLine="18"/>
+      </Position12>
+      <Position13>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="289" Column="40" TopLine="259"/>
+      </Position13>
+      <Position14>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="36" Column="5" TopLine="19"/>
+      </Position14>
+      <Position15>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="290" Column="24" TopLine="260"/>
+      </Position15>
+      <Position16>
+        <Filename Value="_fmmain.pas"/>
+      </Position16>
+      <Position17>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="182" Column="12" TopLine="152"/>
+      </Position17>
+      <Position18>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="182" Column="55" TopLine="152"/>
+      </Position18>
+      <Position19>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="52" Column="19" TopLine="41"/>
+      </Position19>
+      <Position20>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="30" Column="57" TopLine="23"/>
+      </Position20>
+      <Position21>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="290" Column="63" TopLine="269"/>
+      </Position21>
+      <Position22>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="180" Column="5" TopLine="169"/>
+      </Position22>
+      <Position23>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="283" TopLine="257"/>
+      </Position23>
+      <Position24>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="87" Column="43" TopLine="65"/>
+      </Position24>
+      <Position25>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="186" Column="8" TopLine="168"/>
+      </Position25>
+      <Position26>
+        <Filename Value="_fmmain.pas"/>
+        <Caret Line="186" Column="8" TopLine="168"/>
+      </Position26>
+    </JumpHistory>
+  </ProjectSession>
+</CONFIG>
