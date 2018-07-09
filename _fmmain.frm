@@ -3,11 +3,10 @@ object fmMain: TfmMain
   Height = 240
   Top = 250
   Width = 640
-  Caption = 'P4 Sync'
+  Caption = 'Perforce Sync'
   ClientHeight = 240
   ClientWidth = 640
   KeyPreview = True
-  OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   Position = poWorkAreaCenter
   LCLVersion = '6.1'

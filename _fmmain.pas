@@ -5,11 +5,12 @@ unit _fmMain;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, ComCtrls, Windows;
+  Classes, ComCtrls, Dialogs, ExtCtrls, Forms, IniFiles, StdCtrls, SysUtils;
 
 type
+
   { TfmMain }
+
   TfmMain = class(TForm)
     BtnLoad: TButton;
     BtnSync: TButton;
@@ -17,13 +18,19 @@ type
     EdtUsername: TLabeledEdit;
     LbWorkspace: TListBox;
     Status: TStatusBar;
-    procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure BtnLoadClick(Sender: TObject);
     procedure BtnSyncClick(Sender: TObject);
     procedure BtnLogoutClick(Sender: TObject);
     procedure LbWorkspaceDblClick(Sender: TObject);
   private
+    FLoaded: Boolean;
+    FWorkspaceIndex: Integer;
+    procedure LoadIni;
+    procedure SaveIni;
+    procedure SaveUsername;
+    function GetWorkspaceIndex: Integer;
+
     function GetUsername: string;
     procedure SetUsername(AValue: string);
     function GetWorkspaceCount: Integer;
@@ -38,6 +45,11 @@ type
     function Synchronize(Workspace: string): string;
     function SynchronizeAll: string;
   public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    property WorkspaceIndex: Integer read GetWorkspaceIndex;
+
     property Username: string read GetUsername write SetUsername;
     property WorkspaceCount: Integer read GetWorkspaceCount;
     property Workspaces[Index: Integer]: string read GetWorkspaces;
@@ -60,6 +72,10 @@ var
 
 implementation
 
+uses
+  LConvEncoding,
+  Windows;
+
 {$R *.frm}
 
 function OutputExecute(CommandLine: string; WorkDir: string = DefaultDirectory): string;
@@ -69,8 +85,8 @@ var
   ProcessInfo: TProcessInformation;
   hOutputReadPipe, hOutputWritePipe: THandle;
   WasOK: Boolean;
-  pCommandLine: array[0..255] of AnsiChar;
-  BytesRead: Cardinal;
+  Buffer: array[0..255] of AnsiChar;
+  BytesRead: DWORD;
   Handle: Boolean;
 begin
   Result := '';
@@ -95,11 +111,11 @@ begin
     if Handle then
       try
         repeat
-          WasOK := windows.ReadFile(hOutputReadPipe, pCommandLine, 255, BytesRead, nil);
+          WasOK := Windows.ReadFile(hOutputReadPipe, Buffer, SizeOf(Buffer), BytesRead, nil);
           if BytesRead > 0 then
           begin
-            pCommandLine[BytesRead] := #0;
-            Result := Result + pCommandLine;
+            Buffer[BytesRead] := #0;
+            Result := Result + CP949ToUTF8(Buffer);
           end;
         until not WasOK or (BytesRead = 0);
         WaitForSingleObject(ProcessInfo.hProcess, INFINITE);
@@ -152,10 +168,23 @@ end;
 
 { TfmMain }
 
-procedure TfmMain.FormCreate(Sender: TObject);
+constructor TfmMain.Create(AOwner: TComponent);
 begin
-  Username := ReadUsername;
+  inherited Create(AOwner);
+
+  FLoaded := False;
+  LoadIni;
+
+  if Length(Username) = 0 then
+    Username := ReadUsername;
   Load;
+end;
+
+destructor TfmMain.Destroy;
+begin
+  SaveIni;
+
+  inherited Destroy;
 end;
 
 procedure TfmMain.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
@@ -196,6 +225,72 @@ end;
 procedure TfmMain.LbWorkspaceDblClick(Sender: TObject);
 begin
   BtnSync.Click();
+end;
+
+procedure TfmMain.LoadIni;
+var
+  Ini: TIniFile;
+  Parser: TStrings;
+begin
+  FLoaded := True;
+
+  Ini := TIniFile.Create(ChangeFileExt(ParamStr(0), '.ini'));
+  try
+    Username := Ini.ReadString('Config', 'Username', Username);
+    FWorkspaceIndex := Ini.ReadInteger('Config', 'WorkspaceIndex', 0);
+
+    Parser := TStringList.Create;
+    try
+      Parser.CommaText := Ini.ReadString('Config', 'Location', '');
+      if Parser.Count = 4 then begin
+        Position := poDesigned;
+        SetBounds(
+          StrToIntDef(Parser.Strings[0], Left),
+          StrToIntDef(Parser.Strings[1], Top),
+          StrToIntDef(Parser.Strings[2], Width),
+          StrToIntDef(Parser.Strings[3], Height));
+      end;
+    finally
+      FreeAndNil(Parser);
+    end;
+  finally
+    FreeAndNil(Ini);
+  end;
+end;
+
+procedure TfmMain.SaveIni;
+var
+  Ini: TIniFile;
+begin
+  if not FLoaded then
+    Exit;
+
+  Ini := TIniFile.Create(ChangeFileExt(ParamStr(0), '.ini'));
+  try
+    Ini.WriteString('Config', 'Location', Format('%d,%d,%d,%d', [Left, Top, Width, Height]));
+    Ini.WriteInteger('Config', 'WorkspaceIndex', LbWorkspace.ItemIndex);
+  finally
+    FreeAndNil(Ini);
+  end;
+end;
+
+procedure TfmMain.SaveUsername;
+var
+  Ini: TIniFile;
+begin
+  Ini := TIniFile.Create(ChangeFileExt(ParamStr(0), '.ini'));
+  try
+    Ini.WriteString('Config', 'Username', Username);
+  finally
+    FreeAndNil(Ini);
+  end;
+end;
+
+function TfmMain.GetWorkspaceIndex: Integer;
+begin
+  if (0 > FWorkspaceIndex) or (FWorkspaceIndex >= LbWorkspace.Items.Count) then
+    FWorkspaceIndex := 0;
+  Result := FWorkspaceIndex;
 end;
 
 function TfmMain.GetUsername: string;
@@ -253,6 +348,8 @@ begin
   finally
     FreeAndNil(Parser);
   end;
+
+  if Result then SaveUsername;
 end;
 
 function TfmMain.Login: Boolean;
@@ -282,7 +379,8 @@ begin
     Exit;
   LbWorkspace.Items.CommaText := ReadWorkspace;
   LbWorkspace.Items.Insert(0, AllWorkspaces);
-  LbWorkspace.ItemIndex := 0;
+
+  LbWorkspace.ItemIndex := WorkspaceIndex;
 end;
 
 function TfmMain.Synchronize(Workspace: string): string;
@@ -290,7 +388,7 @@ begin
   if Length(Workspace) = 0 then begin
     Exit(SynchronizeAll);
   end;
-  Result := Format('[%s] %s', [Workspace, Trim(OutputExecute(Format(FmtCmdSync, [Username, Workspace])))]);
+  Result := Format('[%s]'#13#10'%s', [Workspace, Trim(OutputExecute(Format(FmtCmdSync, [Username, Workspace])))]);
 end;
 
 function TfmMain.SynchronizeAll: string;
@@ -299,7 +397,9 @@ var
 begin
   Result := '';
   for I := 0 to Pred(WorkspaceCount) do begin
-    Result := Result + Synchronize(Workspaces[I]) + #13#10;
+    if Length(Result) > 0 then
+      Result := Result + #13#10#13#10;
+    Result := Result + Synchronize(Workspaces[I]);
   end;
   Result := Trim(Result);
 end;
