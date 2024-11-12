@@ -77,3 +77,6 @@ lib
 
 # Product auto-generated
 *.ini
+
+# CodeTyphon auto-generated
+*.ctps
