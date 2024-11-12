@@ -1,28 +1,21 @@
 object fmMain: TfmMain
-  Left = 434
+  Left = 429
   Height = 240
-  Top = 250
+  Top = 257
   Width = 640
   Caption = 'Perforce Sync'
   ClientHeight = 240
   ClientWidth = 640
   KeyPreview = True
-  OnKeyDown = FormKeyDown
   Position = poWorkAreaCenter
-  LCLVersion = '6.1'
+  LCLVersion = '8.5'
+  OnKeyDown = FormKeyDown
   object EdtUsername: TLabeledEdit
     Left = 72
     Height = 23
     Top = 4
     Width = 80
-    EditLabel.AnchorSideTop.Control = EdtUsername
-    EditLabel.AnchorSideTop.Side = asrCenter
-    EditLabel.AnchorSideRight.Control = EdtUsername
-    EditLabel.AnchorSideBottom.Control = EdtUsername
-    EditLabel.AnchorSideBottom.Side = asrBottom
-    EditLabel.Left = 7
-    EditLabel.Height = 12
-    EditLabel.Top = 9
+    EditLabel.Height = 23
     EditLabel.Width = 62
     EditLabel.Caption = '&Username '
     EditLabel.ParentColor = False
@@ -35,8 +28,8 @@ object fmMain: TfmMain
     Top = 4
     Width = 67
     Caption = '&Load'
-    OnClick = BtnLoadClick
     TabOrder = 1
+    OnClick = BtnLoadClick
   end
   object BtnSync: TButton
     Left = 570
@@ -45,8 +38,8 @@ object fmMain: TfmMain
     Width = 67
     Anchors = [akTop, akRight]
     Caption = '&Sync'
-    OnClick = BtnSyncClick
     TabOrder = 2
+    OnClick = BtnSyncClick
   end
   object LbWorkspace: TListBox
     Left = 0
@@ -55,9 +48,8 @@ object fmMain: TfmMain
     Width = 640
     Anchors = [akTop, akLeft, akRight, akBottom]
     ItemHeight = 0
-    OnDblClick = LbWorkspaceDblClick
-    Options = [lboDrawFocusRect]
     TabOrder = 4
+    OnDblClick = LbWorkspaceDblClick
   end
   object Status: TStatusBar
     Left = 0
@@ -72,7 +64,7 @@ object fmMain: TfmMain
     Top = 4
     Width = 67
     Caption = 'Log&out'
-    OnClick = BtnLogoutClick
     TabOrder = 3
+    OnClick = BtnLogoutClick
   end
 end

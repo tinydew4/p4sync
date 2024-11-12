@@ -58,7 +58,6 @@ type
 
 const
   AllWorkspaces = '[All workspaces]';
-  DefaultDirectory = 'C:\';
   FmtCmdLogin = 'p4 -u %s login';
   FmtCmdCheckLogin = FmtCmdLogin + ' -s';
   FmtCmdWorkspaces = 'p4 -u %s workspaces -u %s';
@@ -78,7 +77,7 @@ uses
 
 {$R *.frm}
 
-function OutputExecute(CommandLine: string; WorkDir: string = DefaultDirectory): string;
+function OutputExecute(CommandLine: string; WorkDir: string = ''): string;
 var
   SecAtrrs: TSecurityAttributes;
   StartupInfo: TStartupInfo;
@@ -90,6 +89,10 @@ var
   Handle: Boolean;
 begin
   Result := '';
+
+  if WorkDir = '' then begin
+    WorkDir := GetCurrentDir;
+  end;
 
   SecAtrrs.nLength := SizeOf(SecAtrrs);
   SecAtrrs.lpSecurityDescriptor := nil;
@@ -108,33 +111,37 @@ begin
 
     Handle := CreateProcess(nil, PChar('CMD.exe /C ' + CommandLine), nil, nil, True, 0, nil, PChar(WorkDir), StartupInfo, ProcessInfo);
     CloseHandle(hOutputWritePipe);
-    if Handle then
+    if Handle then begin
       try
         repeat
-          WasOK := Windows.ReadFile(hOutputReadPipe, Buffer, SizeOf(Buffer), BytesRead, nil);
-          if BytesRead > 0 then
-          begin
+          WasOK := Windows.ReadFile(hOutputReadPipe, Buffer, SizeOf(Buffer) - 1, BytesRead, nil);
+          if BytesRead > 0 then begin
             Buffer[BytesRead] := #0;
-            Result := Result + CP949ToUTF8(Buffer);
+            Result := Result + LConvEncoding.CP949ToUTF8(Buffer);
           end;
-        until not WasOK or (BytesRead = 0);
+        until not WasOK and (BytesRead = 0);
         WaitForSingleObject(ProcessInfo.hProcess, INFINITE);
       finally
         CloseHandle(ProcessInfo.hThread);
         CloseHandle(ProcessInfo.hProcess);
       end;
+    end;
   finally
     CloseHandle(hOutputReadPipe);
   end;
 end;
 
-function WaitExecute(CommandLine: string; WorkDir: string = DefaultDirectory): string;
+function WaitExecute(CommandLine: string; WorkDir: string = ''): string;
 var
   StartupInfo: TStartupInfo;
   ProcessInfo: TProcessInformation;
   Handle: Boolean;
 begin
   Result := '';
+
+  if WorkDir = '' then begin
+    WorkDir := GetCurrentDir;
+  end;
 
   FillChar(StartupInfo, SizeOf(StartupInfo), 0);
   StartupInfo.cb := SizeOf(StartupInfo);
@@ -374,10 +381,40 @@ begin
 end;
 
 procedure TfmMain.Load(DoLogin: Boolean);
+var
+  sReader: TStrings;
+  sHostname: string;
+  sLine: string;
+  sCurrentHostname: string;
+  I: Int32;
 begin
   if not CheckLogin and (not DoLogin or not Login) then
     Exit;
-  LbWorkspace.Items.CommaText := ReadWorkspace;
+
+  sHostname := Trim(OutputExecute('hostname'));
+
+  LbWorkspace.Items.Clear;
+  with TStringList.Create do begin
+    try
+      CommaText := ReadWorkspace;
+      sReader := TStringList.Create;
+      try
+        sReader.NameValueSeparator := ':';
+        for I := 0 to Pred(Count) do begin
+          sLine := Strings[I];
+          sReader.Text := OutputExecute('p4 client -o ' + ExtractWorkspace(sLine));
+          sCurrentHostname := Trim(sReader.Values['Host']);
+          if (Length(sCurrentHostname) = 0) or (sCurrentHostname = sHostname) then begin
+            LbWorkspace.Items.Add(sLine);
+          end;
+        end;
+      finally
+        sReader.Free;
+      end;
+    finally
+      Free;
+    end;
+  end;
   LbWorkspace.Items.Insert(0, AllWorkspaces);
 
   LbWorkspace.ItemIndex := WorkspaceIndex;
